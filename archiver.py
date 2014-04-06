@@ -188,6 +188,7 @@ def archive(conn, root, source, **kwargs):
   commands = ["tar", "--checkpoint=.10000", "-C", dir, "-czf", fullPath, base]
   log(Level.Info, "Running command ", " ".join(commands))
   subprocess.check_call(commands)
+  print
   cursor.execute(
       """INSERT INTO items VALUES (
              :name,
@@ -278,6 +279,7 @@ def restore(conn, root, item, version, directory, **kwargs):
   commands = ["tar", "--checkpoint=.10000", "-C", directory, "-xzf", fullPath]
   log(Level.Info, "Running command ", " ".join(commands))
   returncode = subprocess.call(commands)
+  print
   status = "Restored" if returncode == 0 else "Corrupted"
   cursor.execute(
       "UPDATE items SET status = :status WHERE name = :name AND version = :version",
